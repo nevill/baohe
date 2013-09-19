@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var nopt = require('nopt'),
+    path = require('path'),
+    baohe = require('../');
+
+var knownOpts = {
+  'to': path,
+};
+
+var parsed = nopt(knownOpts);
+var remains = parsed.argv.remain;
+
+var command = 'help';
+if (remains.length > 0) {
+  command = remains.shift();
+}
+
+delete parsed.argv;
+baohe.getCommand(command).execute(remains, parsed);
