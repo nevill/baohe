@@ -10,7 +10,7 @@ BaoHe (宝盒) is pronounced as `bǎo hé` in Chinese.
     $ npm install -g baohe
 
     # add pan.baidu.com service
-    # will prompt to input username and password, if it's the first time to use
+    # will prompt to input username and password, if it is the first time to use
     $ baohe use baidu
 
     # list service which is in use
@@ -33,3 +33,7 @@ BaoHe (宝盒) is pronounced as `bǎo hé` in Chinese.
 
     # copy local files to specific directory on cloud
     $ baohe cp --to target_dir local_file_a local_file_b
+
+## License
+
+  MIT
