@@ -12,6 +12,8 @@ var Commands = [
   'version',
 ];
 
+var Supports = ['baidu'];
+
 function Baohe() { }
 
 Baohe.prototype.getCommand = function(name) {
@@ -26,3 +28,4 @@ exports = module.exports = new Baohe();
 
 exports.Version = version;
 exports.Commands = Commands;
+exports.Supports = Supports;
