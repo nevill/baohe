@@ -48,11 +48,16 @@ Baohe.prototype.getConfig = function(service) {
     }
   }
 
-  if (!this.config[service]) {
-    this.config[service] = {};
+  var result = this.config;
+
+  if (service) {
+    if (!this.config[service]) {
+      this.config[service] = {};
+    }
+    result = this.config[service];
   }
 
-  return this.config[service];
+  return result;
 };
 
 Baohe.prototype.login = function(user, password, service) {
