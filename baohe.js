@@ -74,11 +74,12 @@ Baohe.prototype.login = function(user, password, service) {
   return result;
 };
 
-Baohe.prototype.debug = function() {
-  if (/\bbaohe\b/.test(process.env.NODE_DEBUG)) {
+Baohe.prototype.debug = function() { };
+if (/\bbaohe\b/.test(process.env.NODE_DEBUG)) {
+  Baohe.prototype.debug = function() {
     console.error('[BAOHE] %s', util.format.apply(util, arguments));
-  }
-};
+  };
+}
 
 Baohe.prototype._writeConfigFile = function() {
   fs.writeFileSync(getConfigFile(),
