@@ -6,8 +6,7 @@
   "bin": {
     "baohe": "bin/baohe"
   },
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/nevill/baohe"
@@ -24,6 +23,7 @@
     "url": "https://github.com/nevill/baohe/issues"
   },
   "dependencies": {
-    "nopt": "~2.1.2"
+    "nopt": "~2.1.2",
+    "request": "~2.27.0"
   }
 }

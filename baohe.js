@@ -32,7 +32,11 @@ Baohe.prototype.getCommand = function(name) {
   return require('./lib/' + command);
 };
 
-Baohe.prototype.getConfig = function() {
+Baohe.prototype.getService = function(serviceName) {
+  return require('./lib/' + serviceName);
+};
+
+Baohe.prototype.getConfig = function(service) {
   if (!this.config) {
     var configFile = getConfigFile();
     if (fs.existsSync(configFile)) {
@@ -41,7 +45,7 @@ Baohe.prototype.getConfig = function() {
       this.config = {};
     }
   }
-  return this.config;
+  return this.config[service];
 };
 
 Baohe.prototype.login = function(user, password, service) {
