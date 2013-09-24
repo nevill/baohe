@@ -1,5 +1,7 @@
 var path = require('path'),
+    util = require('util'),
     fs = require('fs');
+
 var version = require('./package.json').version;
 
 var Commands = [
@@ -60,6 +62,12 @@ Baohe.prototype.login = function(user, password, service) {
     this._writeConfigFile();
   }
   return result;
+};
+
+Baohe.prototype.debug = function() {
+  if (/\bbaohe\b/.test(process.env.NODE_DEBUG)) {
+    console.error('[BAOHE] %s', util.format.apply(util, arguments));
+  }
 };
 
 Baohe.prototype._writeConfigFile = function() {
