@@ -47,6 +47,11 @@ Baohe.prototype.getConfig = function(service) {
       this.config = {};
     }
   }
+
+  if (!this.config[service]) {
+    this.config[service] = {};
+  }
+
   return this.config[service];
 };
 
@@ -71,12 +76,8 @@ Baohe.prototype.debug = function() {
 };
 
 Baohe.prototype._writeConfigFile = function() {
-  fs.writeFile(getConfigFile(), JSON.stringify(this.config, null, 2),
-    function(err) {
-      if (err) {
-        console.err(err);
-      }
-    });
+  fs.writeFileSync(getConfigFile(),
+    JSON.stringify(this.config, null, 2));
 };
 
 exports = module.exports = new Baohe();
