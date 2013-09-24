@@ -16,7 +16,7 @@ var Commands = [
   'version',
 ];
 
-var Supports = ['baidu'];
+var Services = ['baidu'];
 var ConfigFileName = '.baohe.json';
 
 function getConfigFile() {
@@ -90,4 +90,4 @@ exports = module.exports = new Baohe();
 
 exports.Version = version;
 exports.Commands = Commands;
-exports.Supports = Supports;
+exports.Services = Services;
