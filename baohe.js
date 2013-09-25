@@ -60,6 +60,38 @@ Baohe.prototype.getConfig = function(service) {
   return result;
 };
 
+Baohe.prototype.promptLoginInfo = function(callback) {
+
+  function readFromStdin(cb) {
+    var result = '';
+
+    var input = process.stdin;
+    input.setEncoding('utf8');
+
+    var onData = function(chunk) {
+      result += chunk;
+      if (result.slice(-1) === '\n') {
+        input.pause();
+        input.removeListener('data', onData);
+        cb(result.trim());
+      }
+    };
+
+    input.on('data', onData);
+    input.resume();
+  }
+
+  util.print('user name: ');
+  readFromStdin(function(user) {
+    util.print('password: ');
+    readFromStdin(function(password) {
+      process.nextTick(function() {
+        callback(user, password);
+      });
+    });
+  });
+};
+
 Baohe.prototype.login = function(user, password, service) {
   var result = false;
   //test if success
