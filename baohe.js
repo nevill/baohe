@@ -19,6 +19,13 @@ var Commands = [
 var Services = ['baidu'];
 var ConfigFileName = '.baohe.json';
 
+var debug = function() { };
+if (/\bbaohe\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    console.error('[BAOHE] %s', util.format.apply(util, arguments));
+  };
+}
+
 function getConfigFile() {
   var configDir = process.env.HOME || process.env.TMPDIR;
   return path.join(configDir, ConfigFileName);
@@ -60,58 +67,58 @@ Baohe.prototype.getConfig = function(service) {
   return result;
 };
 
-Baohe.prototype.promptLoginInfo = function(callback) {
+Baohe.prototype.processLogin = function(onLogin, onSuccess) {
 
-  function readFromStdin(cb) {
-    var result = '';
+  function promptLoginInfo(callback) {
 
-    var input = process.stdin;
-    input.setEncoding('utf8');
+    function readFromStdin(cb) {
+      var result = '';
 
-    var onData = function(chunk) {
-      result += chunk;
-      if (result.slice(-1) === '\n') {
-        input.pause();
-        input.removeListener('data', onData);
-        cb(result.trim());
-      }
-    };
+      var input = process.stdin;
+      input.setEncoding('utf8');
 
-    input.on('data', onData);
-    input.resume();
+      var onData = function(chunk) {
+        result += chunk;
+        if (result.slice(-1) === '\n') {
+          input.pause();
+          input.removeListener('data', onData);
+          cb(result.trim());
+        }
+      };
+
+      input.on('data', onData);
+      input.resume();
+    }
+
+    util.print('user name: ');
+    readFromStdin(function(user) {
+      util.print('password: ');
+      readFromStdin(function(password) {
+        process.nextTick(function() {
+          callback(user, password);
+        });
+      });
+    });
   }
 
-  util.print('user name: ');
-  readFromStdin(function(user) {
-    util.print('password: ');
-    readFromStdin(function(password) {
-      process.nextTick(function() {
-        callback(user, password);
-      });
+  var self = this;
+
+  promptLoginInfo(function(user, password) {
+    onLogin(user, password, function(success) {
+      if (success) {
+        debug('Login sucessfully');
+        self._writeConfigFile();
+        process.nextTick(onSuccess);
+      } else {
+        process.nextTick(function() {
+          self.processLogin(onLogin, onSuccess);
+        });
+      }
     });
   });
 };
 
-Baohe.prototype.login = function(user, password, service) {
-  var result = false;
-  //test if success
-  if (result) {
-    this.config[service] = {
-      user: user,
-      password: password
-    };
-    // write to config file
-    this._writeConfigFile();
-  }
-  return result;
-};
-
-Baohe.prototype.debug = function() { };
-if (/\bbaohe\b/.test(process.env.NODE_DEBUG)) {
-  Baohe.prototype.debug = function() {
-    console.error('[BAOHE] %s', util.format.apply(util, arguments));
-  };
-}
+Baohe.prototype.debug = debug;
 
 Baohe.prototype._writeConfigFile = function() {
   fs.writeFileSync(getConfigFile(),
